@@ -1,0 +1,7 @@
+{
+    "require":{
+        "league/climate": "dev-master",
+        "symfony/process": "3.0.*@dev",
+        "parse/php-sdk": "1.0.*"
+    }
+}
