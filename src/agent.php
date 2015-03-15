@@ -50,7 +50,20 @@ $climate->red()->out('MONITORING STARTED');
 ParseClient::initialize($config['parse']['app_id'], 
                         $config['parse']['rest_key'], 
                         $config['parse']['master_key']);
+
+if(function_exists('posix_getpwuid'))
+{
+  $processUser = posix_getpwuid(posix_geteuid());
+  $user = $processUser['name'];
+}
+else
+{
+  $user = getenv('username');
+}
+
 $monObj = ParseObject::create('MonSession');
+$monObj->set('user', $user);
+$monObj->set('ip_addr', ''); // will be injected with value in cloud code
 $monObj->save();
 $mon_session_id = $monObj->getObjectId();
 $climate->out('session created: ' . $mon_session_id);
