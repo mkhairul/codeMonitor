@@ -24,7 +24,13 @@ $arguments = [
         'longPrefix'    => 'interval',
         'description'   => 'Interval between creating new record for changes',
         'defaultValue'  => '120' // seconds (2 minutes by default)
-    ]
+    ],
+    'name'  => [
+        'prefix'        => 'n',
+        'longPrefix'    => 'name',
+        'description'   => 'This session\'s name',
+        'defaultValue'  => 'lorem ipsum'
+    ],
 ];
 $climate->arguments->add($arguments);
 try{
@@ -39,10 +45,10 @@ $monitor_path =  str_replace('\\', '/', getcwd());
 // Include filter into the folder's path
 // TODO: check if value is not directory then its ok.
 $filters = explode(' ', $climate->arguments->get('filter'));
-$monitor_path = sprintf('%s/**/%s', $monitor_path, implode('||', $filters));
+$monitor_pattern = sprintf('%s/**/%s', $monitor_path, implode('||', $filters));
 
 $format = json_encode(['"filename"' => '"%FILENAME%"', '"event"' => '"%FSEVENT%"']);
-$cmd = sprintf('filewatcher "%s" "echo %s"', $monitor_path, $format);
+$cmd = sprintf('filewatcher "%s" "echo %s"', $monitor_pattern, $format);
 $process = new Process($cmd);
 $process->start();
 $climate->red()->out('MONITORING STARTED');
@@ -61,9 +67,28 @@ else
   $user = getenv('username');
 }
 
+// Create an identifier for this machine
+$id_path = dirname(__FILE__).'/.codemon';
+$machineID = '';
+if(file_exists($id_path))
+{
+  $machineID = file_get_contents($id_path);
+}
+
+if(!file_exists($id_path) or !$machineID)
+{
+  $factory = new RandomLib\Factory;
+  $generator = $factory->getMediumStrengthGenerator();
+  $machineID = $generator->generateString(32);
+  file_put_contents($id_path, $machineID); 
+}
+$climate->out('machineID: ' . $machineID);
+
 $monObj = ParseObject::create('MonSession');
 $monObj->set('user', $user);
-$monObj->set('ip_addr', ''); // will be injected with value in cloud code
+$monObj->set('machineID', $machineID);
+$monObj->set('directory', $monitor_path);
+$monObj->set('name', $climate->arguments->get('name'));
 $monObj->save();
 $mon_session_id = $monObj->getObjectId();
 $climate->out('session created: ' . $mon_session_id);

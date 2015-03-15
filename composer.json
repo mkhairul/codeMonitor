@@ -2,6 +2,7 @@
     "require":{
         "league/climate": "dev-master",
         "symfony/process": "3.0.*@dev",
-        "parse/php-sdk": "1.0.*"
+        "parse/php-sdk": "1.0.*",
+        "ircmaxell/random-lib": "1.1.*@dev"
     }
 }
