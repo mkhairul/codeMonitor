@@ -48,6 +48,7 @@ $monitor_pattern = sprintf('%s/**/%s', $monitor_path, implode('||', $filters));
 
 $format = json_encode(['"filename"' => '"%FILENAME%"', '"event"' => '"%FSEVENT%"']);
 $cmd = sprintf('filewatcher "%s" "echo %s"', $monitor_pattern, $format);
+echo $cmd;
 $process = new Process($cmd);
 $process->start();
 $climate->red()->out('MONITORING STARTED');
