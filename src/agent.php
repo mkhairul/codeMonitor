@@ -1,5 +1,4 @@
 <?php
-
 require_once(dirname(__FILE__).'/../vendor/autoload.php');
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\PhpProcess;
@@ -89,7 +88,7 @@ $monObj->set('user', $user);
 $monObj->set('machineID', $machineID);
 $monObj->set('directory', $monitor_path);
 $monObj->set('name', $climate->arguments->get('name'));
-$monObj->save();
+echo $monObj->save();
 $mon_session_id = $monObj->getObjectId();
 $climate->out('session created: ' . $mon_session_id);
     
@@ -147,8 +146,8 @@ while($process->isRunning()){
         
         $file_changes->set('event',$json['event']);
         $file_changes->set('content', ($filetype === 'file' && $json['event'] != 'deleted') ? file_get_contents($json['filename']):'');
-        $file_changes->save();
-        
+        $response = $file_changes->save();
         echo $output;
+        echo $response;
     }
 }
