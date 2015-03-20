@@ -30,6 +30,12 @@ $arguments = [
         'description'   => 'This session\'s name',
         'defaultValue'  => 'lorem ipsum'
     ],
+    'directory' => [
+        'prefix'        => 'd',
+        'longPrefix'    => 'directory',
+        'description'   => 'Which folder to monitor',
+        'defaultValue'  => '*'
+    ]
 ];
 $climate->arguments->add($arguments);
 try{
@@ -40,9 +46,9 @@ try{
 }
 
 $interval_limit = $climate->arguments->get('interval');
-$monitor_path =  str_replace('\\', '/', getcwd());
+$monitor_path =  str_replace('\\', '/', $climate->arguments->get('directory'));
 // Include filter into the folder's path
-// TODO: check if value is not directory then its ok.
+// TODO: check if the value is not a directory
 $filters = explode(' ', $climate->arguments->get('filter'));
 $monitor_pattern = sprintf('%s/**/%s', $monitor_path, implode('||', $filters));
 

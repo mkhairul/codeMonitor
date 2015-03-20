@@ -26,17 +26,3 @@ def execute(command):
         popen.stdout.flush()
 
 execute(compiled)
-
-"""
-process = subprocess.Popen(['which', 'filewatcher'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-filewatcher_path = process.stdout.readline()
-#print(str(filewatcher_path).replace('\n', ''))
-print(filewatcher_path.decode('utf-8'))
-filewatcher_path = filewatcher_path.decode('utf-8')
-
-process = subprocess.Popen(tick, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-count = 1
-for line in iter(process.stdout.readline, b''):
-    print(">>> " + line.decode('utf-8'))
-    process.stdout.flush()
-"""
