@@ -2,7 +2,7 @@
 Monitor changes to your folder / files
 
 ```dos
-gem ruby filewatcher
+gem install filewatcher
 composer install
 ```
 
