@@ -1,7 +1,7 @@
+import sys
 import argparse
 import pdb
 import os
-import sys
 import time
 import getpass
 import yaml
@@ -12,6 +12,7 @@ from watchdog.events import PatternMatchingEventHandler
 from parse_rest.connection import register
 from parse_rest.datatypes import Object
 from parse_rest.query import QueryResourceDoesNotExist
+
 
 class CodeMonHandler(PatternMatchingEventHandler):
     patterns = []
@@ -39,7 +40,6 @@ class CodeMonHandler(PatternMatchingEventHandler):
         # print(event.src_path, event.event_type)  # print now only for debug
         
         within_interval = self.within_interval(event.src_path) # check if file is within interval, if it is update existing record
-        #self.fileChanges.filename = os.path.basename(event.src_path)
         self.fileChanges.filename = os.path.abspath(event.src_path)
         self.fileChanges.type = 'directory' if event.is_directory else 'file'
         self.fileChanges.parent = self.session.as_pointer
@@ -127,4 +127,3 @@ if __name__ == '__main__':
         observer.stop()
 
     observer.join()
-    
